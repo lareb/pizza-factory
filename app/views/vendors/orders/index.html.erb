@@ -1,0 +1,47 @@
+<div class="max-w-5xl mx-auto mt-8 p-6 bg-white shadow-lg rounded">
+  <%= link_to "Back", root_path, class: "ml-2 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500" %>
+  <h2 class="text-center text-red-600 text-2xl font-bold">📝 Orders List</h2>
+
+  <div class="overflow-x-auto mt-6">
+    <table class="w-full border border-gray-300 rounded-lg shadow-md">
+      <thead class="bg-gray-800 text-white">
+        <tr>
+          <th class="py-3 px-4 text-left">Order ID</th>
+          <th class="py-3 px-4 text-left">Items</th>
+          <th class="py-3 px-4 text-left">Sides</th>
+          <th class="py-3 px-4 text-left">Created At</th>
+          <th class="py-3 px-4 text-left">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <% @orders.each do |order| %>
+          <tr class="hover:bg-gray-100">
+            <td class="py-3 px-4"><%= order.id %></td>
+            <td class="py-3 px-4">
+              <% order.order_items.each do |item| %>
+                <p class="mb-2">
+                  <span class="font-semibold">Pizza:</span> <%= item.pizza.name %> - 
+                  <span class="font-semibold">Size:</span> <%= item.size %> - 
+                  <span class="font-semibold">Crust:</span> <%= item.crust.name %> - 
+                  <span class="font-semibold">Toppings:</span> 
+                  <%= item.order_toppings.map(&:topping).map(&:name).join(", ") %>
+                </p>
+              <% end %>
+            </td>
+            <td class="py-3 px-4"><%= order.order_sides.map(&:side).map(&:name).join(", ") %></td>
+            <td class="py-3 px-4"><%= order.created_at.strftime("%d-%m-%Y %H:%M") %></td>
+            <td class="py-3 px-4">
+              <%= link_to "View", vendors_order_path(order), class: "bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if @orders.respond_to?(:total_pages) && @orders.total_pages > 1 %>
+    <div class="mt-4 flex justify-center">
+      <%= paginate @orders, theme: nil %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,29 @@
+<div class="container mx-auto mt-10 px-4">
+  <h1 class="text-center text-3xl font-bold mb-6 text-gray-800">Welcome to PizzaFactory 🍕</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Customer Section -->
+    <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+      <h2 class="text-xl font-semibold text-blue-600">For Customers</h2>
+      <p class="text-gray-600 mt-2">Order your favorite pizzas with custom toppings and side orders.</p>
+      <div class="mt-4 space-x-2">
+        <a href="<%= pizzas_path %>" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">View Menu</a>
+        <a href="<%= new_order_path %>" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Place Order</a>
+      </div>
+    </div>
+
+    <!-- Vendor Section -->
+    <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+      <h2 class="text-xl font-semibold text-red-600">For Vendors</h2>
+      <p class="text-gray-600 mt-2">Manage inventory, add pizzas, and update stock.</p>
+      <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <a href="<%= vendors_inventories_path %>" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Manage Inventory and Price</a>
+        <a href="<%= vendors_orders_path %>" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Orders</a>
+        <a href="<%= new_vendors_pizza_path %>" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">Add New Pizza</a>
+        <a href="<%= new_vendors_crust_path %>" class="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded">Add New Crust</a>
+        <a href="<%= new_vendors_topping_path %>" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded">Add New Topping</a>
+        <a href="<%= new_vendors_side_path %>" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Add New Side</a>
+      </div>
+    </div>
+  </div>
+</div>

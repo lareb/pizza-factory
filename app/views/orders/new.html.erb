@@ -1,0 +1,186 @@
+<div class="max-w-3xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
+  <div class="bg-blue-600 text-white p-4 rounded-t-lg">
+    <h3 class="text-lg font-semibold">Place Your Order 🚀</h3>
+  </div>
+  <div class="p-4">
+    <%= form_with url: orders_path, method: :post, local: true, class: "space-y-4", id: "order-form" do |f| %>
+
+      <!-- Pizzas Container -->
+      <div id="pizzas-container">
+        <div class="pizza-item border border-gray-300 p-4 rounded-lg mb-4">
+          <h5 class="text-blue-600 font-semibold mb-2">Pizza 1</h5>
+
+          <div class="mb-3">
+            <label class="block font-medium mb-1">Select Pizza</label>
+            <%= select_tag "order[order_items][][pizza_id]", 
+              options_for_select([["Please Select", ""]] + @pizzas.map { |pizza| ["#{pizza.name} - #{pizza.category.name}", pizza.id] }), 
+              class: "w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300 pizza-select" %>
+          </div>
+
+          <div class="mb-3">
+            <label class="block font-medium mb-1">Choose Size</label>
+            <%= select_tag "order[order_items][][size]", 
+              options_for_select(["Please Select", "Regular", "Medium", "Large"]), 
+              { class: "w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300 size-select" } %>
+          </div>
+
+          <div class="mb-3">
+            <label class="block font-medium mb-1">Select Crust</label>
+            <%= select_tag "order[order_items][][crust_id]", 
+              options_for_select([["Please Select", ""]] + @crusts.map { |crust| [crust.name, crust.id] }), 
+              class: "w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300 crust-select" %>
+          </div>
+
+          <div class="mb-3">
+            <label class="block font-medium mb-2">Add Extra Toppings</label>
+            <% @toppings.each do |topping| %>
+              <div class="flex items-center mb-2">
+                <%= check_box_tag "order[order_items][][topping_ids][]", topping.id, false, 
+                    class: "mr-2 topping-checkbox", 
+                    data: { category: topping.category.name, price: topping.price } %>
+                <%= label_tag "order_items_topping_#{topping.id}", 
+                    "#{topping.name} - #{topping.category.name} (₹#{topping.price})", 
+                    class: "text-gray-700" %>
+              </div>
+            <% end %>
+          </div>
+
+          <button type="button" class="bg-red-500 text-white px-3 py-1 rounded remove-pizza mt-3 hover:bg-red-600">Remove Pizza</button>
+        </div>
+      </div>
+
+      <!-- Add Another Pizza Button -->
+      <div class="text-center">
+        <button type="button" id="add-pizza" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">+ Add Another Pizza</button>
+      </div>
+
+      <div class="mb-3">
+        <label class="block font-medium mb-1">Would you like a side order?</label>
+        <% @sides.each do |side| %>
+          <div class="flex items-center mb-2">
+            <%= check_box_tag "side_ids[]", side.id, false, class: "mr-2" %>
+            <%= label_tag "order_items_side_#{side.id}", "#{side.name} (₹#{side.price})", class: "text-gray-700" %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="text-center mt-4">
+        <%= f.submit "Place Order", class: "bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer" %>
+        <%= link_to "Cancel", root_path, class: "ml-2 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500" %>
+      </div>
+
+    <% end %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const pizzasContainer = document.getElementById("pizzas-container");
+    const addPizzaBtn = document.getElementById("add-pizza");
+
+    let pizzaCount = 1;
+
+    function attachEventListeners(pizzaItem) {
+      const pizzaSelect = pizzaItem.querySelector(".pizza-select");
+      const toppingCheckboxes = pizzaItem.querySelectorAll(".topping-checkbox");
+      const sizeSelect = pizzaItem.querySelector(".size-select");
+
+      pizzaSelect.addEventListener("change", function() {
+        const selectedOption = pizzaSelect.options[pizzaSelect.selectedIndex].text.trim();
+        const parts = selectedOption.split(" - ");
+        const category = parts[parts.length - 1];
+
+        const isVegetarian = category === "Vegetarian";
+        const isNonVeg = category === "Non-Vegetarian";
+
+        toppingCheckboxes.forEach(checkbox => {
+          checkbox.disabled = false;
+          checkbox.checked = false;
+        });
+
+        toppingCheckboxes.forEach(checkbox => {
+          const category = checkbox.getAttribute("data-category");
+
+          if (isVegetarian && category === "Non-Vegetarian") {
+            checkbox.disabled = true;
+            checkbox.checked = false;
+          }
+
+          if (isNonVeg && category === "Paneer") {
+            checkbox.disabled = true;
+            checkbox.checked = false;
+          }
+        });
+      });
+
+      toppingCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", function() {
+          const selectedOption = pizzaSelect.options[pizzaSelect.selectedIndex].text;
+          const isNonVeg = selectedOption.includes("Non-Vegetarian");
+
+          if (isNonVeg) {
+            let nonVegToppings = [];
+            toppingCheckboxes.forEach(t => {
+              if (t.checked && t.getAttribute("data-category") === "Non-Vegetarian") {
+                nonVegToppings.push(t);
+              }
+            });
+
+            if (nonVegToppings.length > 1) {
+              alert("You can only select ONE non-veg topping for a non-vegetarian pizza.");
+              this.checked = false;
+            }
+          }
+        });
+      });
+
+      sizeSelect.addEventListener("change", function() {
+        if (sizeSelect.value === "Large") {
+          let count = 0;
+          toppingCheckboxes.forEach(checkbox => {
+            if (count < 2 && !checkbox.disabled) {
+              checkbox.checked = true;
+              count++;
+            }
+          });
+          alert("Large pizzas come with 2 free toppings.");
+        }
+      });
+    }
+
+    addPizzaBtn.addEventListener("click", function() {
+      pizzaCount++;
+
+      const newPizza = document.querySelector(".pizza-item").cloneNode(true);
+      newPizza.querySelector("h5").innerText = `Pizza ${pizzaCount}`;
+
+      newPizza.querySelectorAll("select").forEach(select => select.selectedIndex = 0);
+      newPizza.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
+        checkbox.checked = false;
+        checkbox.disabled = false;
+      });
+
+      attachEventListeners(newPizza);
+
+      pizzasContainer.appendChild(newPizza);
+
+      newPizza.querySelector(".remove-pizza").addEventListener("click", function() {
+        newPizza.remove();
+        pizzaCount--;
+      });
+    });
+
+    document.addEventListener("click", function(event) {
+      if (event.target.classList.contains("remove-pizza")) {
+        if (document.querySelectorAll(".pizza-item").length > 1) {
+          event.target.closest(".pizza-item").remove();
+          pizzaCount--;
+        } else {
+          alert("You must order at least one pizza.");
+        }
+      }
+    });
+
+    attachEventListeners(document.querySelector(".pizza-item"));
+  });
+</script>

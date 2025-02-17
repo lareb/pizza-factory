@@ -1,0 +1,31 @@
+<div class="max-w-3xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
+  <div class="bg-blue-600 text-white p-4 rounded-t-lg">
+    <h3 class="text-lg font-semibold">Add a New Topping 🍖</h3>
+  </div>
+  <div class="p-4">
+    <%= form_with model: @topping, url: vendors_toppings_path, method: :post, local: true do |f| %>
+      <div class="mb-3">
+        <%= f.label :name, "Topping Name", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_field :name, class: "form-input mt-1 block w-full border-gray-300 rounded-lg", placeholder: "Enter topping name" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :category, "Category", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.select :category_id, 
+                    @categories.collect { |category| [category.name, category.id] }, 
+                    { prompt: "Select category" }, 
+                    class: "w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :price, "Price", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.number_field :price, class: "form-input mt-1 block w-full border-gray-300 rounded-lg", step: "0.01", placeholder: "Enter price" %>
+      </div>
+
+      <div class="text-center mt-4">
+        <%= f.submit "Add Topping", class: "bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer" %>
+        <%= link_to "Cancel", root_path, class: "ml-2 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500" %>
+      </div>
+    <% end %>
+  </div>
+</div>

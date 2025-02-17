@@ -1,0 +1,8 @@
+<% if !current_page.last? %>
+  <%= link_to t('views.pagination.last').html_safe, url, remote: remote, 
+    class: "px-4 py-2 ml-2 text-white bg-blue-500 hover:bg-blue-600 rounded-md shadow-md transition duration-300" %>
+<% else %>
+  <span class="px-4 py-2 ml-2 text-gray-400 bg-gray-200 rounded-md cursor-not-allowed">
+    <%= t('views.pagination.last').html_safe %>
+  </span>
+<% end %>

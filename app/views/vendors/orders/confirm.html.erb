@@ -1,0 +1,14 @@
+<div class="max-w-2xl mx-auto mt-8 p-6 bg-white shadow-lg rounded">
+  <h2 class="text-center text-blue-600 text-2xl font-bold">Order Confirmation</h2>
+
+  <div class="alert bg-blue-100 text-blue-800 border border-blue-300 rounded-md p-4 mt-6 text-center">
+    <strong>Total Price:</strong> ₹<%= @order.total_price %>
+  </div>
+
+  <p class="text-center text-gray-700 mt-4">Do you want to confirm this order?</p>
+
+  <div class="text-center mt-6">
+    <a href="<%= confirm_vendors_order_path(@order) %>" class="bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600">Confirm Order</a>
+    <a href="<%= new_order_path %>" class="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600 ml-4">Cancel</a>
+  </div>
+</div>
