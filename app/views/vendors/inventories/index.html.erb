@@ -1,0 +1,84 @@
+<div class="max-w-5xl mx-auto mt-8 p-6 bg-white shadow-lg rounded">
+  <%= link_to "Back", root_path, class: "ml-2 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500" %>
+  <h2 class="text-center text-red-600 text-2xl font-bold">📊 Manage Inventory and Item Price</h2>
+
+  <div class="overflow-x-auto mt-6">
+    <table class="w-full border border-gray-300 rounded-lg shadow-md">
+      <thead class="bg-gray-800 text-white">
+        <tr>
+          <th class="py-3 px-4 text-left">Item</th>
+          <th class="py-3 px-4 text-left">Type</th>
+          <th class="py-3 px-4 text-left">Stock</th>
+          <th class="py-3 px-4 text-left">Input</th>
+          <th class="py-3 px-4 text-left">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <% @inventories.each do |inv| %>
+          <tr class="hover:bg-gray-100">
+            <td class="py-3 px-4"><%= inv.item.name %></td>
+            <td class="py-3 px-4"><%= inv.item_type %></td>
+            <td class="py-3 px-4"><%= inv.quantity %></td>
+            <%= form_with url: vendors_inventory_path(inv), method: :patch, class: "inline-block" do |f| %>
+              <div class="flex items-center space-x-2">
+                <td class="py-3 px-4">
+                  <div>
+                    <%= f.number_field :quantity, value: inv.quantity, class: "w-16 border border-gray-300 rounded px-2 py-1 relative", data: { tooltip: "Update available stock quantity" } %>
+                    <% if inv.item_type == 'Pizza' %>
+                      <%= f.number_field :price_regular, value: inv.item.price_regular, step: "0.01", class: "w-20 border border-gray-300 rounded px-2 py-1 relative", 
+                          data: { tooltip: "Regular Pizza Price" } %>
+
+                      <%= f.number_field :price_medium, value: inv.item.price_medium, step: "0.01", class: "w-20 border border-gray-300 rounded px-2 py-1 relative", 
+                          data: { tooltip: "Medium Pizza Price" } %>
+
+                      <%= f.number_field :price_large, value: inv.item.price_large, step: "0.01", class: "w-20 border border-gray-300 rounded px-2 py-1 relative", 
+                          data: { tooltip: "Large Pizza Price" } %>
+                    <% elsif ['Topping', 'Side'].include?(inv.item_type) %>
+                      <%= f.number_field :price, value: inv.item.price, step: "0.01", class: "w-20 border border-gray-300 rounded px-2 py-1 relative", 
+                          data: { tooltip: "Price of this #{inv.item_type}" } %>
+                    <% end %>
+                  </div>
+                </td>
+                <td class="py-3 px-4">
+                  <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Update</button>
+                </td>
+              </div>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if @inventories.total_pages > 1 %>
+  <div class="mt-6 flex justify-center">
+    <%= paginate @inventories, theme: nil %>
+  </div>
+<% end %>
+
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll("[data-tooltip]").forEach((element) => {
+      const tooltipText = element.dataset.tooltip;
+      const tooltip = document.createElement("div");
+      
+      tooltip.className = "tooltip hidden absolute bg-gray-800 text-white text-xs rounded py-1 px-2";
+      tooltip.innerText = tooltipText;
+      
+      element.parentElement.style.position = "relative";
+      element.parentElement.appendChild(tooltip);
+
+      element.addEventListener("mouseenter", () => {
+        tooltip.classList.remove("hidden");
+        tooltip.style.top = `${element.offsetTop - tooltip.offsetHeight - 5}px`;
+        tooltip.style.left = `${element.offsetLeft}px`;
+      });
+
+      element.addEventListener("mouseleave", () => {
+        tooltip.classList.add("hidden");
+      });
+    });
+  });
+</script>

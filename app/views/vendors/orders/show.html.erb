@@ -1,0 +1,85 @@
+<div class="container mx-auto mt-6">
+  <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+    <div class="bg-blue-500 text-white p-4">
+      <h4 class="text-xl font-bold"><span class="bg-gray-50">🛒</span> Order Summary (#<%= @order.id %>)</h4>
+    </div>
+    <div class="p-6">
+      <!-- Order Status -->
+      <p class="text-lg">
+        <strong>Status:</strong> 
+        <span class="inline-block px-3 py-1 text-white rounded-full <%= order_status_color(@order.status) %>">
+          <%= @order.status %>
+        </span>
+      </p>
+
+      <!-- Pizza Items with Toppings -->
+      <h5 class="text-lg font-semibold mt-4">🍕 Pizzas</h5>
+      <table class="min-w-full table-auto border-collapse">
+        <thead>
+          <tr>
+            <th class="px-4 py-2 border-b">Name</th>
+            <th class="px-4 py-2 border-b">Crust</th>
+            <th class="px-4 py-2 border-b">Size</th>
+            <th class="px-4 py-2 border-b">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @order.order_items.each do |item| %>
+            <tr>
+              <td class="px-4 py-2 border-b"><%= item.pizza.name %></td>
+              <td class="px-4 py-2 border-b"><%= item.crust.name %></td>
+              <td class="px-4 py-2 border-b"><%= item.size.capitalize %></td>
+              <td class="px-4 py-2 border-b">₹<%= pizza_price(item.pizza, item.size) %></td>
+            </tr>
+            <% if item.order_toppings.any? %>
+              <tr bg-gray-50>
+                <td colspan="4" class="px-4 py-2 border-b">
+                  <strong>🌟 Toppings:</strong>
+                  <ul class="list-none pl-0">
+                    <% sorted_toppings = item.order_toppings.sort_by { |ot| -ot.topping.price } %>
+                    <% free_toppings = item.size == "large" ? sorted_toppings.first(2) : [] %>
+                    <% sorted_toppings.each do |order_topping| %>
+                      <li class="flex justify-between items-center py-1">
+                        <span><%= order_topping.topping.name %></span>
+                        <span>
+                          <% if free_toppings.include?(order_topping) %>
+                            <strong class="text-green-500">Free</strong>
+                          <% else %>
+                            ₹<%= order_topping.topping.price %>
+                          <% end %>
+                        </span>
+                      </li>
+                    <% end %>
+                  </ul>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+
+      <!-- Sides -->
+      <% if @order.order_sides.any? %>
+        <h5 class="text-lg font-semibold mt-4">🍟 Sides</h5>
+        <ul class="list-none pl-0">
+          <% @order.order_sides.each do |order_side| %>
+            <li class="flex justify-between items-center py-2 border-b">
+              <span><%= order_side.side.name %></span>
+              <span>₹<%= order_side.side.price %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+
+      <!-- Total Amount -->
+      <div class="mt-4">
+        <h4 class="text-right text-xl font-semibold">💰 Total: ₹<%= @order.total_price %></h4>
+      </div>
+
+      <!-- Order Confirmation Button -->
+      <% if @order.status == "Pending" %>
+        <%= link_to "Confirm Order", confirm_vendors_order_path(@order), method: :post, class: "bg-green-500 text-white px-6 py-3 rounded-full w-full mt-4 hover:bg-green-600 transition-all" %>
+      <% end %>
+    </div>
+  </div>
+</div>

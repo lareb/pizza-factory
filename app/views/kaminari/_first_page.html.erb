@@ -1,0 +1,8 @@
+<% if current_page.first? %>
+  <span class="px-3 py-2 text-gray-500 bg-gray-300 rounded cursor-not-allowed">
+    <%= t('views.pagination.first').html_safe || "First" %>
+  </span>
+<% else %>
+  <%= link_to t('views.pagination.first').html_safe || "First", url, remote: remote,
+      class: "px-3 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300" %>
+<% end %>
