@@ -229,6 +229,6 @@ _Handles toppings management.
 
 For any issues, reach out via:
 
-  📧 Email: larebindore@gmail.com
+  📧 Email: lareb.indore@gmail.com
 
   📌 GitHub Issues: Open an Issue
