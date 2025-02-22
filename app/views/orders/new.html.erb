@@ -39,7 +39,7 @@
                     class: "mr-2 topping-checkbox", 
                     data: { category: topping.category.name, price: topping.price } %>
                 <%= label_tag "order_items_topping_#{topping.id}", 
-                    "#{topping.name} - #{topping.category.name} (₹#{topping.price})", 
+                    "#{topping.name} - #{topping.category.name} (#{number_to_currency(topping.price, unit: "$", precision: 2)})", 
                     class: "text-gray-700" %>
               </div>
             <% end %>
@@ -59,7 +59,7 @@
         <% @sides.each do |side| %>
           <div class="flex items-center mb-2">
             <%= check_box_tag "side_ids[]", side.id, false, class: "mr-2" %>
-            <%= label_tag "order_items_side_#{side.id}", "#{side.name} (₹#{side.price})", class: "text-gray-700" %>
+            <%= label_tag "order_items_side_#{side.id}", "#{side.name} (#{number_to_currency(side.price, unit: "$", precision: 2)})", class: "text-gray-700" %>
           </div>
         <% end %>
       </div>

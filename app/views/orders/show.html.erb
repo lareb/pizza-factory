@@ -31,7 +31,7 @@
               <td class="px-4 py-2 border"><%= item.pizza.name %></td>
               <td class="px-4 py-2 border"><%= item.crust.name %></td>
               <td class="px-4 py-2 border"><%= item.size.capitalize %></td>
-              <td class="px-4 py-2 border">₹<%= pizza_price(item.pizza, item.size) %></td>
+              <td class="px-4 py-2 border"><%= number_to_currency(pizza_price(item.pizza, item.size), unit: "$", precision: 2) %></td>
             </tr>
 
             <!-- Toppings Row (Nested under Pizza) -->
@@ -51,7 +51,7 @@
                           <% if free_toppings.include?(order_topping) %>
                             <strong class="text-green-500">Free</strong>
                           <% else %>
-                            ₹<%= order_topping.topping.price %>
+                            <%= number_to_currency(order_topping.topping.price, unit: "$", precision: 2) %>
                           <% end %>
                         </span>
                       </li>
@@ -71,7 +71,7 @@
           <% @order.order_sides.each do |order_side| %>
             <li class="flex justify-between items-center px-4 py-2 border-b">
               <%= order_side.side.name %>
-              <span>₹<%= order_side.side.price %></span>
+              <span><%= number_to_currency(order_side.side.price, unit: "$", precision: 2) %></span>
             </li>
           <% end %>
         </ul>
@@ -79,7 +79,7 @@
 
       <!-- Total Amount -->
       <div class="mt-6 text-right">
-        <h4 class="text-xl font-semibold">💰 Total: ₹<%= @order.total_price %></h4>
+        <h4 class="text-xl font-semibold">💰 Total: <%= number_to_currency(@order.total_price, unit: "$", precision: 2) %></h4>
       </div>
 
       <!-- Order Confirmation Button -->

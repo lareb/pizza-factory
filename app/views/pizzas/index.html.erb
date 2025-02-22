@@ -9,11 +9,10 @@
         
         <p class="text-gray-700 mt-2">
           <strong>Prices:</strong><br>
-          Regular: ₹<%= pizza.price_regular %><br>
-          Medium: ₹<%= pizza.price_medium %><br>
-          Large: ₹<%= pizza.price_large %>
-        </p>
-
+          Regular: <%= number_to_currency(pizza.price_regular, unit: "$", precision: 2) %><br>
+          Medium: <%= number_to_currency(pizza.price_medium, unit: "$", precision: 2) %><br>
+          Large: <%= number_to_currency(pizza.price_large, unit: "$", precision: 2) %>
+        </p>      
         <a href="<%= new_order_path %>" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mt-4 inline-block">Order Now</a>
       </div>
     <% end %>

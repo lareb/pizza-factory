@@ -29,7 +29,7 @@
               <% end %>
             </td>
             <td class="py-3 px-4"><%= order.order_sides.map(&:side).map(&:name).join(", ") %></td>
-            <td class="py-3 px-4"><%= order.created_at.strftime("%d-%m-%Y %H:%M") %></td>
+            <td class="py-3 px-4"><%= order.created_at.strftime("%B %d, %Y at %I:%M %p") %></td>
             <td class="py-3 px-4">
               <%= link_to "View", vendors_order_path(order), class: "bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600" %>
             </td>

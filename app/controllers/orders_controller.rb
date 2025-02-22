@@ -38,35 +38,6 @@ class OrdersController < ApplicationController
 
   private
 
-  # def order_params
-  #   params.require(:order).permit(order_items: [:pizza_id, :size, :crust_id, topping_ids: []])
-  # end
-
-  # def order_params
-  #   params.require(:order).permit(order_items: [:pizza_id, :size, :crust_id, topping_ids: []], side_ids: [])
-  # end
-
-  # def order_params
-  #   params.require(:order).permit(
-  #     order_items: [:pizza_id, :size, :crust_id, topping_ids: []]
-  #   )
-  #   params.permit(:side_ids)  # Ensure side_ids is permitted at the top-level
-  # end
-
-  # def order_params
-  #   params.require(:order).permit(
-  #     side_ids: [],
-  #     order_items: [:pizza_id, :size, :crust_id, topping_ids: []],
-  #   )
-  # end
-
-  # def order_params
-  #   params.permit(
-  #     order: { order_items: [:pizza_id, :size, :crust_id, topping_ids: []] },
-  #     side_ids: []  # Ensure side_ids is permitted directly at the top level.
-  #   )
-  # end
-
   def load_order_dependencies
     @pizzas = Pizza.includes(:category).all
     @crusts = Crust.all

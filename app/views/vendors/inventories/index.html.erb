@@ -25,16 +25,16 @@
                   <div>
                     <%= f.number_field :quantity, value: inv.quantity, class: "w-16 border border-gray-300 rounded px-2 py-1 relative", data: { tooltip: "Update available stock quantity" } %>
                     <% if inv.item_type == 'Pizza' %>
-                      <%= f.number_field :price_regular, value: inv.item.price_regular, step: "0.01", class: "w-20 border border-gray-300 rounded px-2 py-1 relative", 
+                      <%= f.number_field :price_regular, value: ('%.2f' % inv.item.price_regular), step: "0.01", class: "w-20 border border-gray-300 rounded px-1 py-1 relative", 
                           data: { tooltip: "Regular Pizza Price" } %>
 
-                      <%= f.number_field :price_medium, value: inv.item.price_medium, step: "0.01", class: "w-20 border border-gray-300 rounded px-2 py-1 relative", 
+                      <%= f.number_field :price_medium, value: ('%.2f' % inv.item.price_medium), step: "0.01", class: "w-20 border border-gray-300 rounded px-1 py-1 relative", 
                           data: { tooltip: "Medium Pizza Price" } %>
 
-                      <%= f.number_field :price_large, value: inv.item.price_large, step: "0.01", class: "w-20 border border-gray-300 rounded px-2 py-1 relative", 
+                      <%= f.number_field :price_large, value: ('%.2f' % inv.item.price_large), step: "0.01", class: "w-20 border border-gray-300 rounded px-1 py-1 relative", 
                           data: { tooltip: "Large Pizza Price" } %>
                     <% elsif ['Topping', 'Side'].include?(inv.item_type) %>
-                      <%= f.number_field :price, value: inv.item.price, step: "0.01", class: "w-20 border border-gray-300 rounded px-2 py-1 relative", 
+                      <%= f.number_field :price, value: ('%.2f' % inv.item.price), step: "0.01", class: "w-20 border border-gray-300 rounded px-1 py-1 relative", 
                           data: { tooltip: "Price of this #{inv.item_type}" } %>
                     <% end %>
                   </div>
